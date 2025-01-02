@@ -17,6 +17,12 @@ from lxml import html
 
 url = 'https://oracle-www.dartmouth.edu/dart/groucho/timetable.display_courses'
 
+# initial check of timetable 
+res = requests.get(url)
+if res.ok == False:
+    print("Error: timetable not available")
+    exit(255)
+
 # generate default term 
 def default_term():
     y, m  = date.today().timetuple()[:2]
@@ -173,8 +179,8 @@ for row in timetable_data:
    else:
       format_section(row)
 
-if args.empty_seats == True and args.summarize == True:
-   print(f'\nTotal empty seats: {tes}')
-
 if args.summarize == True:
    print(f'\nTotal enrollments: {te}')
+if args.empty_seats == True and args.summarize == True:
+   print(f'Total empty seats: {tes}')
+
