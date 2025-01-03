@@ -8,13 +8,16 @@
 # james.e.dobson@dartmouth.edu
 #
 # Initial version: 12/05/2024
-# Latest update: 12/07/2024
+# Latest update: 01/02/2025
 
 import requests
 import argparse
 from datetime import date
 from lxml import html
 
+ver = "0.3"
+
+# timetable url
 url = 'https://oracle-www.dartmouth.edu/dart/groucho/timetable.display_courses'
 
 # initial check of timetable 
@@ -65,6 +68,7 @@ else:
 
 
 if args.verbose_flag:
+   print(f'version: {ver}')
    print(f'term: {term}')
    print(f'dept: {dept}')
 
