@@ -15,7 +15,7 @@ import argparse
 from datetime import date
 from lxml import html
 
-ver = "0.3"
+ver = "0.3.1"
 
 # timetable url
 url = 'https://oracle-www.dartmouth.edu/dart/groucho/timetable.display_courses'
@@ -88,6 +88,11 @@ def extract_class_information(html_content):
     # Parse the HTML content
     tree = html.fromstring(html_content)
 
+    # error checking for missing/wrong department
+    if len(tree.xpath('//div[@class="data-table"]/table')) == 0:
+       print("Error accessing timetable for selected dept")
+       exit(255)
+ 
     # Find the data table
     data_table = tree.xpath('//div[@class="data-table"]/table')[0]
 
@@ -170,9 +175,9 @@ def format_section(row):
           # deal with overenrolled classes (don't count as empty seats)
           if es[0] == "-":
              tes = tes - int(es)
-      print(f"{row['Subj']}-{row['Num']:10s} {row['Instructor']:30s} {row['Period Code']:3s} {row['Lim']:3s} {row['Enrl']:3s} {es:3s}")
+      print(f"{row['Subj']:4s} {row['Num']:6s} {row['Instructor']:30s} {row['Period Code']:3s} {row['Lim']:3s} {row['Enrl']:3s} {es:3s}")
    else:
-       print(f"{row['Subj']}-{row['Num']:10s} {row['Instructor']:30s} {row['Period Code']:3s} {row['Lim']:3s} {row['Enrl']:3s}")
+       print(f"{row['Subj']:4s} {row['Num']:6s} {row['Instructor']:30s} {row['Period Code']:3s} {row['Lim']:3s} {row['Enrl']:3s}")
 
 te = 0     # total enrollment
 tes = 0    # total empty seats
