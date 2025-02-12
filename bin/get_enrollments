@@ -165,6 +165,9 @@ timetable_data = get_enrollment(dept)
 # handle printing in a separate function
 def format_section(row):
    global tes, te
+   # prior to course election these values are NaN
+   if row['Enrl'] == "NaN":
+      row['Enrl'] = "0" # make string for later casting as int
    te += int(row['Enrl'])
    if args.empty_seats:
       if row['Lim'] == "NaN":
