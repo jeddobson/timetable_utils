@@ -50,7 +50,7 @@ parser.add_argument('-v','--verbose',help='display verbose output', dest='verbos
 parser.add_argument('-sum','--summarize',help='summarize', dest='summarize', action='store_true')
 parser.add_argument('-t','--term',help='term in 202501 format')
 parser.add_argument('-d','--department',help='department code')
-parser.add_argument('-s','--section',help='section number')
+parser.add_argument('-c','--course',help='course number')
 parser.add_argument('-e','--empty',help='calculate empty seats', dest="empty_seats", action='store_true')
 
 args = parser.parse_args()
@@ -163,7 +163,7 @@ def get_enrollment(dept):
 timetable_data = get_enrollment(dept)
 
 # handle printing in a separate function
-def format_section(row):
+def format_course(row):
    global tes, te
    # prior to course election these values are NaN
    if row['Enrl'] == "NaN":
@@ -178,18 +178,18 @@ def format_section(row):
           # deal with overenrolled classes (don't count as empty seats)
           if es[0] == "-":
              tes = tes - int(es)
-      print(f"{row['Subj']:4s} {row['Num']:6s} {row['Instructor']:30s} {row['Period Code']:3s} {row['Lim']:3s} {row['Enrl']:3s} {es:3s}")
+      print(f"{row['Subj']:4s} {row['Num']:>5} {row['Sec']:3s} {row['Instructor']:30s} {row['Period Code']:3s} {row['Lim']:3s} {row['Enrl']:3s} {es:3s}")
    else:
-       print(f"{row['Subj']:4s} {row['Num']:6s} {row['Instructor']:30s} {row['Period Code']:3s} {row['Lim']:3s} {row['Enrl']:3s}")
+       print(f"{row['Subj']:4s} {row['Num']:>5} {row['Sec']:3s} {row['Instructor']:30s} {row['Period Code']:3s} {row['Lim']:3s} {row['Enrl']:3s}")
 
 te = 0     # total enrollment
 tes = 0    # total empty seats
 for row in timetable_data:
-   if args.section != None:
-      if row['Num'] == args.section:
-         format_section(row)
+   if args.course != None:
+      if row['Num'] == args.course:
+         format_course(row)
    else:
-      format_section(row)
+      format_course(row)
 
 if args.summarize == True:
    print(f'\nTotal enrollments: {te}')
